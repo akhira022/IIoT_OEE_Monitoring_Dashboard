@@ -1,0 +1,171 @@
+[
+    {
+        "id": "2805cd840c25752e",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a72a47f19c025fd1",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "ead504c4f6825439",
+        "type": "mqtt-broker",
+        "name": "conveyor_admin",
+        "broker": "6fc975c703db4324859a6b7bd9c2d149.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "a72a47f19c025fd1",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "7018736852f96829",
+        "type": "mqtt in",
+        "z": "2805cd840c25752e",
+        "name": "",
+        "topic": "factory/conveyor/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "ead504c4f6825439",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 160,
+        "wires": [
+            [
+                "bdcdb5c590e092ad"
+            ]
+        ]
+    },
+    {
+        "id": "bdcdb5c590e092ad",
+        "type": "function",
+        "z": "2805cd840c25752e",
+        "name": "function 1",
+        "func": "// 1. ตรวจสอบว่าข้อมูลที่เข้ามาคือหัวข้ออะไร เพื่อแยกเก็บความจำ\nif (msg.topic === \"factory/conveyor/total\") {\n    flow.set(\"total\", Number(msg.payload)); \n} \nelse if (msg.topic === \"factory/conveyor/waste\") {\n    flow.set(\"waste\", Number(msg.payload)); \n}\nelse if (msg.topic === \"factory/conveyor/status\") {\n    flow.set(\"status\", Number(msg.payload)); \n}\n\n// 2. ดึงค่ายอดล่าสุดมาใช้งาน (ถ้าเพิ่งเปิดระบบ ยังไม่มีข้อมูล ให้มองเป็น 0)\nlet t = flow.get(\"total\") || 0;\nlet w = flow.get(\"waste\") || 0;\nlet s = flow.get(\"status\") || 0;\n\n// 3. 🎯 คำนวณหายอดชิ้นงานดี (Good Count)\nlet g = t - w;\n\n// 4. มัดรวมข้อมูลเป็นก้อน (JSON) เพื่อเตรียมส่งขึ้น Dashboard\nmsg.payload = {\n    \"Total_Count\": t,\n    \"Waste_Count\": w,\n    \"Good_Count\": g,\n    \"System_Status\": s\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 160,
+        "wires": [
+            [
+                "9ba32cf26b386945"
+            ]
+        ]
+    },
+    {
+        "id": "9ba32cf26b386945",
+        "type": "debug",
+        "z": "2805cd840c25752e",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "c2632e064008d0b6",
+        "type": "inject",
+        "z": "2805cd840c25752e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "factory/conveyor/total",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 430,
+        "y": 40,
+        "wires": [
+            [
+                "bdcdb5c590e092ad"
+            ]
+        ]
+    },
+    {
+        "id": "4dfd0edbc80b0612",
+        "type": "inject",
+        "z": "2805cd840c25752e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "factory/conveyor/waste",
+        "payload": "2",
+        "payloadType": "num",
+        "x": 430,
+        "y": 280,
+        "wires": [
+            [
+                "bdcdb5c590e092ad"
+            ]
+        ]
+    }
+]
