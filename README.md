@@ -1,1 +1,54 @@
-🏭 IIoT OEE Monitoring Dashboard v 1.0ระบบตรวจสอบประสิทธิภาพสายพานลำเลียงอัจฉริยะแบบ Real-time ด้วยสถาปัตยกรรม Industrial IoT (IIoT) รองรับการคำนวณดัชนีประสิทธิผลโดยรวมของเครื่องจักร (OEE) บนระบบหลังบ้าน และแสดงผลแบบอัตโนมัติผ่าน Dashboard มาตรฐานอุตสาหกรรม🛠️ เทคโนโลยีที่เลือกใช้งาน (Tech Stack)Hardware: ESP32 Microcontroller + IR Sensor x 3 (Total, Good, Waste)Protocol: MQTT (ผ่านทาง HiveMQ Cloud Secure Port 8883)Backend Logic: Node-RED (ประมวลผลสมการ OEE และระบบ Watchdog จับเวลาคนหาย 1 นาที)Database: InfluxDB v2 (จัดเก็บข้อมูลอนุกรมเวลา Time-Series ขาเข้าและผลลัพธ์)Visualization: Grafana Dashboard (แสดงผลกราฟเปอร์เซ็นต์และเกจวัดสถานะ)🔄 สถาปัตยกรรมข้อมูล (Data Flow & Logic)ระบบทำการดักจับสตรีมข้อมูลชิ้นงานผ่านโปรโตคอล MQTT จากเซนเซอร์ 3 จุด และนำมาประมวลผลที่ระบบหลังบ้าน (Node-RED) เพื่อหาค่าประสิทธิภาพตามหลักการทางวิศวกรรม:$$OEE = Availability \times Performance \times Quality$$ฟีเจอร์เพิ่มเติมฝั่ง Logic:Watchdog / Timeout: หากไม่มีชิ้นงานไหลผ่านเซนเซอร์ตัวใดตัวหนึ่งเกินเวลา 1 นาที Node-RED จะทำการ Override ค่าเพื่อเปลี่ยนสถานะเครื่องจักรเป็น IDLE (หยุดพัก) อัตโนมัติ📡 MQTT Topic Structurefactory/conveyor/total : ยอดนับชิ้นงานรวมจากต้นสายพาน (Total Count)factory/conveyor/good : ยอดนับชิ้นงานที่ผ่านการตรวจสอบคุณภาพ (Good Count)factory/conveyor/waste : ยอดนับชิ้นงานเสียที่ถูกคัดออก (Waste Count)🔌 การต่อใช้งานขาพินฮาร์ดแวร์ (Pin Assignment)อุปกรณ์ฮาร์ดแวร์ขาพิน ESP32หน้าที่การทำงานIR Sensor 1 (Total)GPIO 14นับจำนวนชิ้นงานทั้งหมดที่เข้าสู่สายพานIR Sensor 2 (Good)GPIO 13นับจำนวนชิ้นงานดีที่ผ่านเกณฑ์ QCIR Sensor 3 (Waste)GPIO 12นับจำนวนชิ้นงานเสียที่ถูกปัดออก(หมายเหตุ: สามารถปรับเปลี่ยนขา GPIO ของเซนเซอร์ได้ตามความเหมาะสมของโค้ดฝั่ง Arduino)🚀 วิธีนำโปรเจกต์ไปติดตั้งเพื่อใช้งาน (Installation)ฝั่งฮาร์ดแวร์ (ESP32): เปิดไฟล์โค้ดในโฟลเดอร์ esp32/ ด้วย Arduino IDE ทำการตั้งค่าชื่อ Wi-Fi (SSID), รหัสผ่าน และข้อมูลประจำตัว HiveMQ Cloud (Username/Password) จากนั้นอัปโหลดลงบอร์ดฝั่งหลังบ้าน (Node-RED): เปิด Node-RED ผ่านบราวเซอร์ที่พอร์ต 1880 กดเมนูขวาบน เลือก Import แล้วนำไฟล์ node-red/flows.json ไปวาง เพื่อนำเข้า Flow การคำนวณ OEE และระบบ Watchdogฝั่งฐานข้อมูล (InfluxDB): ตรวจสอบการรันเซิร์ฟเวอร์ที่พอร์ต 8086 และสร้าง Bucket ชื่อ conveyor_oeeฝั่งแสดงผล (Grafana): เปิดบราวเซอร์ที่พอร์ต 3000 นำเข้าไฟล์ Dashboard Template เพื่อเริ่มมอนิเตอร์สถานะเครื่องจักรได้ทันที
+
+
+#  IIoT OEE Monitoring Dashboard v 1.0
+
+ระบบตรวจสอบประสิทธิภาพสายพานลำเลียงอัจฉริยะแบบ Real-time ด้วยสถาปัตยกรรม Industrial IoT (IIoT) รองรับการคำนวณดัชนีประสิทธิผลโดยรวมของเครื่องจักร (OEE) บนระบบหลังบ้าน และแสดงผลแบบอัตโนมัติผ่าน Dashboard มาตรฐานอุตสาหกรรม
+
+---
+
+##  เทคโนโลยีที่เลือกใช้งาน (Tech Stack)
+
+* **Hardware:** ESP32 Microcontroller + IR Sensor x 3 (Total, Good, Waste)
+* **Protocol:** MQTT (ผ่านทาง HiveMQ Cloud Secure Port 8883)
+* **Backend Logic:** Node-RED (ประมวลผลสมการ OEE และระบบ Watchdog จับเวลาคนหาย 1 นาที)
+* **Database:** InfluxDB v2 (จัดเก็บข้อมูลอนุกรมเวลา Time-Series ขาเข้าและผลลัพธ์)
+* **Visualization:** Grafana Dashboard (แสดงผลกราฟเปอร์เซ็นต์และเกจวัดสถานะ)
+
+---
+
+##  สถาปัตยกรรมข้อมูล (Data Flow & Logic)
+
+ระบบทำการดักจับสตรีมข้อมูลชิ้นงานผ่านโปรโตคอล MQTT จากเซนเซอร์ 3 จุด และนำมาประมวลผลที่ระบบหลังบ้าน (Node-RED) เพื่อหาค่าประสิทธิภาพตามหลักการทางวิศวกรรม:
+
+$$OEE = Availability \times Performance \times Quality$$
+
+**ฟีเจอร์เพิ่มเติมฝั่ง Logic:**
+
+* **Watchdog / Timeout:** หากไม่มีชิ้นงานไหลผ่านเซนเซอร์ตัวใดตัวหนึ่งเกินเวลา 1 นาที Node-RED จะทำการ Override ค่าเพื่อเปลี่ยนสถานะเครื่องจักรเป็น **IDLE (หยุดพัก)** อัตโนมัติ
+
+###  MQTT Topic Structure
+
+* `factory/conveyor/total` : ยอดนับชิ้นงานรวมจากต้นสายพาน (Total Count)
+* `factory/conveyor/good` : ยอดนับชิ้นงานที่ผ่านการตรวจสอบคุณภาพ (Good Count)
+* `factory/conveyor/waste` : ยอดนับชิ้นงานเสียที่ถูกคัดออก (Waste Count)
+
+---
+
+##  การต่อใช้งานขาพินฮาร์ดแวร์ (Pin Assignment)
+
+| อุปกรณ์ฮาร์ดแวร์ | ขาพิน ESP32 | หน้าที่การทำงาน |
+| --- | --- | --- |
+| **IR Sensor 1 (Total)** | `GPIO 14` | นับจำนวนชิ้นงานทั้งหมดที่เข้าสู่สายพาน |
+| **IR Sensor 2 (Good)** | `GPIO 13` | นับจำนวนชิ้นงานดีที่ผ่านเกณฑ์ QC |
+| **IR Sensor 3 (Waste)** | `GPIO 12` | นับจำนวนชิ้นงานเสียที่ถูกปัดออก |
+
+*(หมายเหตุ: สามารถปรับเปลี่ยนขา GPIO ของเซนเซอร์ได้ตามความเหมาะสมของโค้ดฝั่ง Arduino)*
+
+---
+
+##  วิธีนำโปรเจกต์ไปติดตั้งเพื่อใช้งาน (Installation)
+
+1. **ฝั่งฮาร์ดแวร์ (ESP32):** เปิดไฟล์โค้ดในโฟลเดอร์ `esp32/` ด้วย Arduino IDE ทำการตั้งค่าชื่อ Wi-Fi (SSID), รหัสผ่าน และข้อมูลประจำตัว HiveMQ Cloud (Username/Password) จากนั้นอัปโหลดลงบอร์ด
+2. **ฝั่งหลังบ้าน (Node-RED):** เปิด Node-RED ผ่านบราวเซอร์ที่พอร์ต `1880` กดเมนูขวาบน เลือก **Import** แล้วนำไฟล์ `node-red/flows.json` ไปวาง เพื่อนำเข้า Flow การคำนวณ OEE และระบบ Watchdog
+3. **ฝั่งฐานข้อมูล (InfluxDB):** ตรวจสอบการรันเซิร์ฟเวอร์ที่พอร์ต `8086` และสร้าง Bucket ชื่อ `conveyor_oee`
+4. **ฝั่งแสดงผล (Grafana):** เปิดบราวเซอร์ที่พอร์ต `3000` นำเข้าไฟล์ Dashboard Template เพื่อเริ่มมอนิเตอร์สถานะเครื่องจักรได้ทันที
