@@ -1,5 +1,5 @@
 
-
+(thai)
 #  IIoT OEE Monitoring Dashboard v 1.0
 
 ระบบตรวจสอบประสิทธิภาพสายพานลำเลียงอัจฉริยะแบบ Real-time ด้วยสถาปัตยกรรม Industrial IoT (IIoT) รองรับการคำนวณดัชนีประสิทธิผลโดยรวมของเครื่องจักร (OEE) บนระบบหลังบ้าน และแสดงผลแบบอัตโนมัติผ่าน Dashboard มาตรฐานอุตสาหกรรม
@@ -52,3 +52,64 @@ $$OEE = Availability \times Performance \times Quality$$
 2. **ฝั่งหลังบ้าน (Node-RED):** เปิด Node-RED ผ่านบราวเซอร์ที่พอร์ต `1880` กดเมนูขวาบน เลือก **Import** แล้วนำไฟล์ `node-red/flows.json` ไปวาง เพื่อนำเข้า Flow การคำนวณ OEE และระบบ Watchdog
 3. **ฝั่งฐานข้อมูล (InfluxDB):** ตรวจสอบการรันเซิร์ฟเวอร์ที่พอร์ต `8086` และสร้าง Bucket ชื่อ `conveyor_oee`
 4. **ฝั่งแสดงผล (Grafana):** เปิดบราวเซอร์ที่พอร์ต `3000` นำเข้าไฟล์ Dashboard Template เพื่อเริ่มมอนิเตอร์สถานะเครื่องจักรได้ทันที
+
+
+
+
+
+ `README .md` (Eng)
+
+---
+
+# IIoT OEE Monitoring Dashboard v 1.0
+
+A real-time smart conveyor belt efficiency monitoring system powered by Industrial IoT (IIoT) architecture. Features backend calculation of Overall Equipment Effectiveness (OEE) metrics and automated visualization via an industry-standard dashboard.
+
+---
+
+## Tech Stack
+
+* **Hardware:** ESP32 Microcontroller + IR Sensors x 3 (Total, Good, Waste)
+* **Protocol:** MQTT (via HiveMQ Cloud Secure Port 8883)
+* **Backend Logic:** Node-RED (OEE computation engine & 1-minute timeout Watchdog system)
+* **Database:** InfluxDB v2 (Time-series database for raw sensor streams and computed metrics)
+* **Visualization:** Grafana Dashboard (Real-time gauges, status indicators, and historical trends)
+
+---
+
+## Data Architecture & Logic
+
+The system ingests real-time item counts via MQTT across 3 sensor points and processes them on the backend (Node-RED) to compute performance based on standard industrial engineering principles:
+
+$$OEE = Availability \times Performance \times Quality$$
+
+**Key Logic Feature:**
+
+* **Watchdog / Timeout Mechanism:** If no items pass any sensor for over 1 minute, Node-RED automatically overrides the machine status to **IDLE (Standby)** to maintain data accuracy.
+
+### MQTT Topic Structure
+
+* `factory/conveyor/total` : Total item count at the entry point (Total Count)
+* `factory/conveyor/good` : Passed quality check item count (Good Count)
+* `factory/conveyor/waste` : Defective or rejected item count (Waste Count)
+
+---
+
+## Hardware Pin Assignment
+
+| Hardware Component | ESP32 Pin | Function / Description |
+| --- | --- | --- |
+| **IR Sensor 1 (Total)** | `GPIO 14` | Counts total incoming items on the conveyor |
+| **IR Sensor 2 (Good)** | `GPIO 13` | Counts items meeting quality criteria (Good) |
+| **IR Sensor 3 (Waste)** | `GPIO 12` | Counts defective/rejected items (Waste) |
+
+*(Note: Pin assignments can be customized in the Arduino code to fit your specific hardware configuration.)*
+
+---
+
+## Installation & Setup Guide
+
+1. **Hardware Setup (ESP32):** Open the project code in `esp32/` using Arduino IDE. Configure your Wi-Fi credentials (SSID & Password) and HiveMQ Cloud authentication details (Username/Password), then upload the sketch to the ESP32 board.
+2. **Backend Setup (Node-RED):** Access Node-RED via your browser at port `1880`. Click the top-right menu, select **Import**, and paste/upload `node-red/flows.json` to load the OEE calculation engine and Watchdog logic.
+3. **Database Setup (InfluxDB):** Ensure InfluxDB v2 is running on port `8086` and create a bucket named `conveyor_oee`.
+4. **Visualization Setup (Grafana):** Open Grafana at port `3000` and import the dashboard template file to start real-time monitoring.
