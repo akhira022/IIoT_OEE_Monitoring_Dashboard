@@ -1,0 +1,522 @@
+[
+    {
+        "id": "adaf3a0a2a40c5bb",
+        "type": "tab",
+        "label": "IIoT OEE Conveyor Engine",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a72a47f19c025fd1",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "ead504c4f6825439",
+        "type": "mqtt-broker",
+        "name": "conveyor_admin",
+        "broker": "6fc975c703db4324859a6b7bd9c2d149.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "a72a47f19c025fd1",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "secure_tls_config",
+        "type": "tls-config",
+        "name": "HiveMQ_TLS",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "6fc975c703db4324859a6b7bd9c2d149.s1.eu.hivemq.cloud",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "hivemq_secure_broker",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Cloud",
+        "broker": "6fc975c703db4324859a6b7bd9c2d149.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "secure_tls_config",
+        "clientid": "NodeRED_Conveyor_V4",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "conveyor_tab_oee",
+        "type": "ui_tab",
+        "name": "Smart Conveyor Belt",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "conveyor_group_oee",
+        "type": "ui_group",
+        "name": "ข้อมูล OEE & การผลิตแบบเรียลไทม์",
+        "tab": "conveyor_tab_oee",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0ed4d46019d22626",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "a8dd352da68f5b6b",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "conveyor_oee",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "d30c80a4557fadbf",
+        "type": "inject",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "Tick อัปเดตทุก 1 วินาที",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 230,
+        "y": 140,
+        "wires": [
+            [
+                "c2e7b2415545593f"
+            ]
+        ]
+    },
+    {
+        "id": "2f339c0fcde43347",
+        "type": "mqtt in",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "รับยอดรวม (Total)",
+        "topic": "factory/conveyor/total",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "hivemq_secure_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 200,
+        "wires": [
+            [
+                "c2e7b2415545593f",
+                "e30676caee28b2ca"
+            ]
+        ]
+    },
+    {
+        "id": "a7b3a09e7aa374c4",
+        "type": "mqtt in",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "รับของดี (Good)",
+        "topic": "factory/conveyor/good",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "hivemq_secure_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 260,
+        "wires": [
+            [
+                "c2e7b2415545593f"
+            ]
+        ]
+    },
+    {
+        "id": "1b8d4fb65916b495",
+        "type": "mqtt in",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "รับของเสีย (Waste)",
+        "topic": "factory/conveyor/waste",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "hivemq_secure_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 250,
+        "y": 320,
+        "wires": [
+            [
+                "c2e7b2415545593f"
+            ]
+        ]
+    },
+    {
+        "id": "c2e7b2415545593f",
+        "type": "function",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "OEE Calculation Engine",
+        "func": "// ==========================================\n// ⚙️ OEE Calculation Engine (update:แก้ไขตรรกะเวลาและสถานะสายพาน)\n// ==========================================\n\nlet now = Date.now();\n\n// 1. ดึงข้อมูลจาก Memory (Flow Context)\nlet total = flow.get(\"totalCount\") ?? 0;\nlet good = flow.get(\"goodCount\") ?? 0;\nlet waste = flow.get(\"wasteCount\") ?? 0;\n\nlet lastObjectTime = flow.get(\"lastObjectTime\") || now;\nlet startTime = flow.get(\"startTime\") || now;\nlet lastTime = flow.get(\"lastTime\") || now;\nlet runningTimeSec = flow.get(\"runningTimeSec\") || 0;\n\nif (!flow.get(\"startTime\")) {\n    flow.set(\"startTime\", startTime);\n}\n\n// ---------------------------------------------------------\n// 2. คำนวณเวลาและสถานะสะสม (ต้องทำก่อนอัปเดตข้อมูลใหม่)\n// ---------------------------------------------------------\nlet timeDiff = (now - lastTime) / 1000; // วินาทีที่ผ่านไปนับจากรอบก่อน\nlet idleTimeoutMs = 60000; // 60 วินาที\n\n// เช็คสถานะ \"ช่วงที่ผ่านมา\" ว่าทำงานหรือหยุด (ก่อนมีชิ้นงานใหม่เข้ามา)\nlet status = 1; // 1 = RUNNING, 0 = STOPPED\nif ((now - lastObjectTime) > idleTimeoutMs) {\n    status = 0; \n}\n\n// สะสมเวลาเฉพาะช่วงที่สถานะเป็น RUNNING และเวลาไม่กระโดดเกินจริง (เช่น เกิน 2 นาที)\nif (status === 1 && timeDiff > 0 && timeDiff < 120) {\n    runningTimeSec += timeDiff;\n}\n\n// อัปเดตจุดอ้างอิงเวลาสำหรับการคำนวณรอบถัดไป\nflow.set(\"lastTime\", now);\nflow.set(\"runningTimeSec\", runningTimeSec);\n\n// ---------------------------------------------------------\n// 3. รับและอัปเดตข้อมูลจาก MQTT\n// ---------------------------------------------------------\nif (msg.topic === \"factory/conveyor/total\") {\n    total = Math.max(0, Number(msg.payload));\n    flow.set(\"totalCount\", total);\n    lastObjectTime = now;\n} else if (msg.topic === \"factory/conveyor/good\") {\n    good = Math.max(0, Number(msg.payload));\n    flow.set(\"goodCount\", good);\n    lastObjectTime = now;\n} else if (msg.topic === \"factory/conveyor/waste\") {\n    waste = Math.max(0, Number(msg.payload));\n    flow.set(\"wasteCount\", waste);\n    lastObjectTime = now;\n}\n\n// เซฟเวลาล่าสุดที่มีของผ่านสายพาน\nflow.set(\"lastObjectTime\", lastObjectTime);\n\n// ถ้ารอบนี้มีของผ่าน (lastObjectTime เพิ่งถูกอัปเดต) ให้สถานะปัจจุบันกลับมาเป็น RUNNING ทันที\nif ((now - lastObjectTime) <= idleTimeoutMs) {\n    status = 1;\n}\nflow.set(\"conveyorStatus\", status);\n\n// ---------------------------------------------------------\n// 4. คำนวณดัชนี OEE \n// ---------------------------------------------------------\n\n// A - Quality (%)\nlet quality = total > 0 ? (good / total) * 100 : 100;\nquality = Math.min(100, Math.max(0, quality));\n\n// B - Availability (%)\nlet totalPlannedTime = (now - startTime) / 1000;\nlet availability = totalPlannedTime > 0 ? (runningTimeSec / totalPlannedTime) * 100 : 100;\navailability = Math.min(100, Math.max(0, availability));\n\n// C - Performance (%)\nlet idealCycleTime = 5; // เวลามาตรฐาน 5 วินาที / ชิ้น\nlet expectedOutput = runningTimeSec / idealCycleTime;\nlet performance = 100;\n\nif (runningTimeSec > 0 && expectedOutput > 0) {\n    performance = (total / expectedOutput) * 100;\n}\nperformance = Math.min(100, Math.max(0, performance));\n\n// ดัชนีรวม OEE (%)\nlet oee = (availability / 100) * (performance / 100) * (quality / 100) * 100;\n\n// ---------------------------------------------------------\n// 5. บีบข้อมูลส่งออก\n// ---------------------------------------------------------\nlet statusText = (status === 1) ? \"🟢 กำลังทำงาน (RUNNING)\" : \"🔴 หยุดทำงาน (IDLE/STOPPED)\";\n\nlet dataPayload = {\n    total: total,\n    good: good,\n    waste: waste,\n    status: status,\n    statusText: statusText,\n    availability: parseFloat(availability.toFixed(1)),\n    performance: parseFloat(performance.toFixed(1)),\n    quality: parseFloat(quality.toFixed(1)),\n    oee: parseFloat(oee.toFixed(1)),\n    // --- ส่วนที่เพิ่มเข้ามาใหม่ ---\n    running_time_sec: Math.round(runningTimeSec),\n    total_time_sec: Math.round(totalPlannedTime)\n};\n\nlet msgDash = { payload: dataPayload };\nlet msgInflux = {\n    payload: { ...dataPayload },\n    tags: { conveyor_id: \"LINE_01\" }\n};\n\nreturn [msgDash, msgInflux];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 250,
+        "wires": [
+            [
+                "0d2f4b6818e97b2c",
+                "389860a0f39b0382",
+                "0986038e8c431ee0",
+                "a776fd56028bdf4a",
+                "2d547d0b7002e69c",
+                "c53c08dc56c1c5df"
+            ],
+            [
+                "a7c95197abfd5644"
+            ]
+        ]
+    },
+    {
+        "id": "0d2f4b6818e97b2c",
+        "type": "ui_text",
+        "z": "adaf3a0a2a40c5bb",
+        "group": "conveyor_group_oee",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "สถานะสายพาน",
+        "label": "⚡ สถานะการทำงาน",
+        "format": "{{msg.payload.statusText}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 810,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "389860a0f39b0382",
+        "type": "ui_text",
+        "z": "adaf3a0a2a40c5bb",
+        "group": "conveyor_group_oee",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "ยอดรวม",
+        "label": "📦 ยอดรวม (Total)",
+        "format": "{{msg.payload.total}} ชิ้น",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 800,
+        "y": 190,
+        "wires": []
+    },
+    {
+        "id": "0986038e8c431ee0",
+        "type": "ui_text",
+        "z": "adaf3a0a2a40c5bb",
+        "group": "conveyor_group_oee",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "ของดี",
+        "label": "✅ ของดี (Good)",
+        "format": "{{msg.payload.good}} ชิ้น",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 790,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a776fd56028bdf4a",
+        "type": "ui_text",
+        "z": "adaf3a0a2a40c5bb",
+        "group": "conveyor_group_oee",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "ของเสีย",
+        "label": "⚠️ ของเสีย (Waste)",
+        "format": "{{msg.payload.waste}} ชิ้น",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 800,
+        "y": 290,
+        "wires": []
+    },
+    {
+        "id": "2d547d0b7002e69c",
+        "type": "ui_gauge",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "",
+        "group": "conveyor_group_oee",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "ดัชนีประสิทธิผลอุปกรณ์โดยรวม (%OEE)",
+        "label": "%",
+        "format": "{{msg.payload.oee}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#e63946",
+            "#ffb703",
+            "#2a9d8f"
+        ],
+        "seg1": "60",
+        "seg2": "85",
+        "diff": false,
+        "className": "",
+        "x": 810,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "c53c08dc56c1c5df",
+        "type": "debug",
+        "z": "adaf3a0a2a40c5bb",
+        "name": " มอนิเตอร์ข้อมูล Dashboard",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 390,
+        "wires": []
+    },
+    {
+        "id": "a7c95197abfd5644",
+        "type": "influxdb out",
+        "z": "adaf3a0a2a40c5bb",
+        "influxdb": "a8dd352da68f5b6b",
+        "name": "conveyor_oee",
+        "measurement": "oee_metrics",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "factory",
+        "bucket": "conveyor_oee",
+        "x": 820,
+        "y": 450,
+        "wires": []
+    },
+    {
+        "id": "e30676caee28b2ca",
+        "type": "debug",
+        "z": "adaf3a0a2a40c5bb",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 220,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "86e55b113716931e",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-contrib-influxdb": "0.7.0"
+        }
+    }
+]
