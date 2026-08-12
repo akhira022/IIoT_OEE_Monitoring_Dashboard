@@ -1,12 +1,13 @@
-
-(thai)
-#  IIoT OEE Monitoring Dashboard v 8.3
+# IIoT OEE Monitoring Dashboard v 8.3
 
 ระบบตรวจสอบประสิทธิภาพสายพานลำเลียงอัจฉริยะแบบ Real-time ด้วยสถาปัตยกรรม Industrial IoT (IIoT) รองรับการคำนวณดัชนีประสิทธิผลโดยรวมของเครื่องจักร (OEE) บนระบบหลังบ้าน และแสดงผลแบบอัตโนมัติผ่าน Dashboard มาตรฐานอุตสาหกรรม
 
+> เอกสารครบสำหรับโปรเจค ปวส. (แยกบทที่ 1–5 + ภาคผนวก): [`docs/README.md`](docs/README.md)  
+> เอกสารรวมเล่มฉบับเดียว: [`docs/เอกสารโปรเจค-ปวส.md`](docs/เอกสารโปรเจค-ปวส.md)
+
 ---
 
-##  เทคโนโลยีที่เลือกใช้งาน (Tech Stack)
+## เทคโนโลยีที่เลือกใช้งาน (Tech Stack)
 
 * **Hardware:** ESP32 Microcontroller + IR Sensor x 3 (Total, Good, Waste)
 * **Protocol:** MQTT (ผ่านทาง HiveMQ Cloud Secure Port 8883)
@@ -16,7 +17,7 @@
 
 ---
 
-##  สถาปัตยกรรมข้อมูล (Data Flow & Logic)
+## สถาปัตยกรรมข้อมูล (Data Flow & Logic)
 
 ระบบทำการดักจับสตรีมข้อมูลชิ้นงานผ่านโปรโตคอล MQTT จากเซนเซอร์ 3 จุด และนำมาประมวลผลที่ระบบหลังบ้าน (Node-RED) เพื่อหาค่าประสิทธิภาพตามหลักการทางวิศวกรรม:
 
@@ -26,7 +27,7 @@ $$OEE = Availability \times Performance \times Quality$$
 
 * **Watchdog / Timeout:** หากไม่มีชิ้นงานไหลผ่านเซนเซอร์ตัวใดตัวหนึ่งเกินเวลา 1 นาที Node-RED จะทำการ Override ค่าเพื่อเปลี่ยนสถานะเครื่องจักรเป็น **IDLE (หยุดพัก)** อัตโนมัติ
 
-###  MQTT Topic Structure
+### MQTT Topic Structure
 
 * `factory/conveyor/total` : ยอดนับชิ้นงานรวมจากต้นสายพาน (Total Count)
 * `factory/conveyor/good` : ยอดนับชิ้นงานที่ผ่านการตรวจสอบคุณภาพ (Good Count)
@@ -34,7 +35,9 @@ $$OEE = Availability \times Performance \times Quality$$
 
 ---
 
-##  การต่อใช้งานขาพินฮาร์ดแวร์ (Pin Assignment)
+## การต่อใช้งานขาพินฮาร์ดแวร์ (Pin Assignment)
+
+อ้างอิงจาก firmware ปัจจุบัน `esp32/esp32_8.3v.ino`
 
 | อุปกรณ์ฮาร์ดแวร์ | ขาพิน ESP32 | หน้าที่การทำงาน |
 | --- | --- | --- |
@@ -46,24 +49,31 @@ $$OEE = Availability \times Performance \times Quality$$
 
 ---
 
-##  วิธีนำโปรเจกต์ไปติดตั้งเพื่อใช้งาน (Installation)
+## โครงสร้างไฟล์ในโปรเจกต์
 
-1. **ฝั่งฮาร์ดแวร์ (ESP32):** เปิดไฟล์โค้ดในโฟลเดอร์ `esp32/` ด้วย Arduino IDE ทำการตั้งค่าชื่อ Wi-Fi (SSID), รหัสผ่าน และข้อมูลประจำตัว HiveMQ Cloud (Username/Password) จากนั้นอัปโหลดลงบอร์ด
-2. **ฝั่งหลังบ้าน (Node-RED):** เปิด Node-RED ผ่านบราวเซอร์ที่พอร์ต `1880` กดเมนูขวาบน เลือก **Import** แล้วนำไฟล์ `node-red/flows.json` ไปวาง เพื่อนำเข้า Flow การคำนวณ OEE และระบบ Watchdog
-3. **ฝั่งฐานข้อมูล (InfluxDB):** ตรวจสอบการรันเซิร์ฟเวอร์ที่พอร์ต `8086` และสร้าง Bucket ชื่อ `conveyor_oee`
-4. **ฝั่งแสดงผล (Grafana):** เปิดบราวเซอร์ที่พอร์ต `3000` นำเข้าไฟล์ Dashboard Template เพื่อเริ่มมอนิเตอร์สถานะเครื่องจักรได้ทันที
-
-
-
-
-
-
+* `esp32/esp32_8.3v.ino` — firmware หลัก (IR 3 ตัว + MQTT TLS)
+* `esp32/esp32_3.2v.ino` — เวอร์ชันเก่า (มีปุ่ม Start/Stop/Reset + รีเลย์มอเตอร์)
+* `node-red/flows_final_8.3v.json` — Node-RED flow คำนวณ OEE และ Watchdog
+* `grafana/Smart Conveyor Belt - IIoT OEE Dashboard-1785916197192.json` — Grafana dashboard template
+* `docs/README.md` — สารบัญเอกสารรายงานแบบแยกบท (ปวส.)
+* `docs/เอกสารโปรเจค-ปวส.md` — เอกสารโปรเจคฉบับรวมเล่ม
 
 ---
- `README .md` (Eng)
-# IIoT OEE Monitoring Dashboard v 1.0
+
+## วิธีนำโปรเจกต์ไปติดตั้งเพื่อใช้งาน (Installation)
+
+1. **ฝั่งฮาร์ดแวร์ (ESP32):** เปิด `esp32/esp32_8.3v.ino` ด้วย Arduino IDE แล้วแทนที่ค่า `YOUR_WIFI_SSID`, `YOUR_WIFI_PASSWORD`, `YOUR_CLUSTER_ID.s1.eu.hivemq.cloud`, `YOUR_MQTT_USERNAME`, และ `YOUR_MQTT_PASSWORD` จากนั้นอัปโหลดลงบอร์ด
+2. **ฝั่งหลังบ้าน (Node-RED):** เปิด Node-RED ผ่านบราวเซอร์ที่พอร์ต `1880` กดเมนูขวาบน เลือก **Import** แล้วนำเข้าไฟล์ `node-red/flows_final_8.3v.json` จากนั้นตั้งค่า MQTT broker hostname และ credentials ของ HiveMQ Cloud ให้ตรงกับ ESP32
+3. **ฝั่งฐานข้อมูล (InfluxDB):** ตรวจสอบการรันเซิร์ฟเวอร์ที่พอร์ต `8086` และสร้าง Bucket ชื่อ `conveyor_oee`
+4. **ฝั่งแสดงผล (Grafana):** เปิดบราวเซอร์ที่พอร์ต `3000` นำเข้าไฟล์ `grafana/Smart Conveyor Belt - IIoT OEE Dashboard-1785916197192.json` เพื่อเริ่มมอนิเตอร์สถานะเครื่องจักรได้ทันที
+
+---
+
+# IIoT OEE Monitoring Dashboard v 8.3 (English)
 
 A real-time smart conveyor belt efficiency monitoring system powered by Industrial IoT (IIoT) architecture. Features backend calculation of Overall Equipment Effectiveness (OEE) metrics and automated visualization via an industry-standard dashboard.
+
+> Full project documentation (Thai, vocational diploma chapters 1–5): [`docs/README.md`](docs/README.md)
 
 ---
 
@@ -97,19 +107,32 @@ $$OEE = Availability \times Performance \times Quality$$
 
 ## Hardware Pin Assignment
 
+Based on the current firmware in `esp32/esp32_8.3v.ino`
+
 | Hardware Component | ESP32 Pin | Function / Description |
 | --- | --- | --- |
-| **IR Sensor 1 (Total)** | `GPIO 14` | Counts total incoming items on the conveyor |
-| **IR Sensor 2 (Good)** | `GPIO 13` | Counts items meeting quality criteria (Good) |
-| **IR Sensor 3 (Waste)** | `GPIO 12` | Counts defective/rejected items (Waste) |
+| **IR Sensor 1 (Total)** | `GPIO 2` | Counts total incoming items on the conveyor |
+| **IR Sensor 2 (Good)** | `GPIO 4` | Counts items meeting quality criteria (Good) |
+| **IR Sensor 3 (Waste)** | `GPIO 5` | Counts defective/rejected items (Waste) |
 
 *(Note: Pin assignments can be customized in the Arduino code to fit your specific hardware configuration.)*
 
 ---
 
+## Project Files
+
+* `esp32/esp32_8.3v.ino` — primary firmware (3 IR sensors + MQTT TLS)
+* `esp32/esp32_3.2v.ino` — legacy firmware (Start/Stop/Reset buttons + motor relay)
+* `node-red/flows_final_8.3v.json` — Node-RED OEE calculation and Watchdog flow
+* `grafana/Smart Conveyor Belt - IIoT OEE Dashboard-1785916197192.json` — Grafana dashboard template
+* `docs/README.md` — chapter index for vocational diploma report
+* `docs/เอกสารโปรเจค-ปวส.md` — single-file full project documentation
+
+---
+
 ## Installation & Setup Guide
 
-1. **Hardware Setup (ESP32):** Open the project code in `esp32/` using Arduino IDE. Configure your Wi-Fi credentials (SSID & Password) and HiveMQ Cloud authentication details (Username/Password), then upload the sketch to the ESP32 board.
-2. **Backend Setup (Node-RED):** Access Node-RED via your browser at port `1880`. Click the top-right menu, select **Import**, and paste/upload `node-red/flows.json` to load the OEE calculation engine and Watchdog logic.
+1. **Hardware Setup (ESP32):** Open `esp32/esp32_8.3v.ino` in Arduino IDE. Replace the placeholders `YOUR_WIFI_SSID`, `YOUR_WIFI_PASSWORD`, `YOUR_CLUSTER_ID.s1.eu.hivemq.cloud`, `YOUR_MQTT_USERNAME`, and `YOUR_MQTT_PASSWORD`, then upload the sketch to the ESP32 board.
+2. **Backend Setup (Node-RED):** Access Node-RED via your browser at port `1880`. Click the top-right menu, select **Import**, and upload `node-red/flows_final_8.3v.json`. Then configure the HiveMQ Cloud broker hostname and credentials to match the ESP32 settings.
 3. **Database Setup (InfluxDB):** Ensure InfluxDB v2 is running on port `8086` and create a bucket named `conveyor_oee`.
-4. **Visualization Setup (Grafana):** Open Grafana at port `3000` and import the dashboard template file to start real-time monitoring.
+4. **Visualization Setup (Grafana):** Open Grafana at port `3000` and import `grafana/Smart Conveyor Belt - IIoT OEE Dashboard-1785916197192.json` to start real-time monitoring.

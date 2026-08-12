@@ -1,6 +1,6 @@
 /*
  * โปรเจกต์: Conveyor Belt Model for Real-Time Overall Equipment Effectiveness (OEE) Evaluation + IoT Cloud
- * เวอร์ชัน: 8.3 (Fixed Compiler & HiveMQ TLS Connection) LASTUPDATE
+ * เวอร์ชัน: 8.3 (Fixed Compiler & HiveMQ TLS Connection)
  */
 
 #include <WiFi.h>
@@ -9,14 +9,15 @@
 
 // ==========================================
 //  1. ตั้งค่าอินเทอร์เน็ต และ MQTT HiveMQ
+//  ใส่ค่าจริงก่อนอัปโหลด — ห้าม commit credentials จริงลง repo
 // ==========================================
-const char* ssid = "Sompit_2.4G"; 
-const char* password = "0636572880";
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 
-const char* mqtt_server = "6fc975c703db4324859a6b7bd9c2d149.s1.eu.hivemq.cloud";
-const int mqtt_port = 8883; 
-const char* mqtt_user = "conveyor_admin";
-const char* mqtt_pass = "Password123456";
+const char* mqtt_server = "YOUR_CLUSTER_ID.s1.eu.hivemq.cloud";
+const int mqtt_port = 8883;
+const char* mqtt_user = "YOUR_MQTT_USERNAME";
+const char* mqtt_pass = "YOUR_MQTT_PASSWORD";
 
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
