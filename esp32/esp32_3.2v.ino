@@ -14,13 +14,13 @@
 // ==========================================
 // 🌐 1. ตั้งค่าอินเทอร์เน็ต และ MQTT
 // ==========================================
-const char* ssid = "ใส่ชื่อ_WIFI_ของคุณตรงนี้"; 
-const char* password = "ใส่รหัส_WIFI_ของคุณตรงนี้";
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 
-const char* mqtt_server = "6fc975c703db4324859a6b7bd9c2d149.s1.eu.hivemq.cloud";
-const int mqtt_port = 8883; 
-const char* mqtt_user = "conveyor_admin";
-const char* mqtt_pass = "Password123456";
+const char* mqtt_server = "YOUR_CLUSTER_ID.s1.eu.hivemq.cloud";
+const int mqtt_port = 8883;
+const char* mqtt_user = "YOUR_MQTT_USERNAME";
+const char* mqtt_pass = "YOUR_MQTT_PASSWORD";
 
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
