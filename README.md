@@ -2,6 +2,9 @@
 
 ระบบตรวจสอบประสิทธิภาพสายพานลำเลียงอัจฉริยะแบบ Real-time ด้วยสถาปัตยกรรม Industrial IoT (IIoT) รองรับการคำนวณดัชนีประสิทธิผลโดยรวมของเครื่องจักร (OEE) บนระบบหลังบ้าน และแสดงผลแบบอัตโนมัติผ่าน Dashboard มาตรฐานอุตสาหกรรม
 
+> เอกสารครบสำหรับโปรเจค ปวส. (กลุ่มเป้าหมาย, เหตุผล, ทฤษฎี OEE, สถาปัตยกรรม, แผนทดสอบ, คำถามสอบ):  
+> [`docs/เอกสารโปรเจค-ปวส.md`](docs/เอกสารโปรเจค-ปวส.md)
+
 ---
 
 ## เทคโนโลยีที่เลือกใช้งาน (Tech Stack)
@@ -52,6 +55,7 @@ $$OEE = Availability \times Performance \times Quality$$
 * `esp32/esp32_3.2v.ino` — เวอร์ชันเก่า (มีปุ่ม Start/Stop/Reset + รีเลย์มอเตอร์)
 * `node-red/flows_final_8.3v.json` — Node-RED flow คำนวณ OEE และ Watchdog
 * `grafana/Smart Conveyor Belt - IIoT OEE Dashboard-1785916197192.json` — Grafana dashboard template
+* `docs/เอกสารโปรเจค-ปวส.md` — เอกสารโปรเจคฉบับเต็มสำหรับ ปวส.
 
 ---
 
@@ -67,6 +71,8 @@ $$OEE = Availability \times Performance \times Quality$$
 # IIoT OEE Monitoring Dashboard v 8.3 (English)
 
 A real-time smart conveyor belt efficiency monitoring system powered by Industrial IoT (IIoT) architecture. Features backend calculation of Overall Equipment Effectiveness (OEE) metrics and automated visualization via an industry-standard dashboard.
+
+> Full project documentation (Thai, for vocational diploma / ปวส.): [`docs/เอกสารโปรเจค-ปวส.md`](docs/เอกสารโปรเจค-ปวส.md)
 
 ---
 
