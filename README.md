@@ -29,9 +29,9 @@ $$OEE = Availability \times Performance \times Quality$$
 
 ### MQTT Topic Structure
 
-* `factory/conveyor/total` : ยอดนับชิ้นงานรวมจากต้นสายพาน (Total Count)
-* `factory/conveyor/good` : ยอดนับชิ้นงานที่ผ่านการตรวจสอบคุณภาพ (Good Count)
-* `factory/conveyor/waste` : ยอดนับชิ้นงานเสียที่ถูกคัดออก (Waste Count)
+* `factory/conveyor/total` : ยอดนับชิ้นงานรวมจากต้นสายพาน (Total Count) — นับอัตโนมัติ
+* `factory/conveyor/good` : ยอดนับชิ้นงานดีที่ไหลผ่านจนสุดสายพาน (Good Count) — นับอัตโนมัติ
+* `factory/conveyor/waste` : ยอดนับชิ้นงานเสียที่ถูกคัดออก (Waste Count) — นับผ่านกระบวนการ **Manual QC** (พนักงานตรวจด้วยสายตาแล้วจับชิ้นงานให้โดนเซนเซอร์กึ่งกลางสายพาน)
 
 ---
 
@@ -39,11 +39,11 @@ $$OEE = Availability \times Performance \times Quality$$
 
 อ้างอิงจาก firmware ปัจจุบัน `esp32/esp32_8.3v.ino`
 
-| อุปกรณ์ฮาร์ดแวร์ | ขาพิน ESP32 | หน้าที่การทำงาน |
-| --- | --- | --- |
-| **IR Sensor 1 (Total)** | `GPIO 2` | นับจำนวนชิ้นงานทั้งหมดที่เข้าสู่สายพาน |
-| **IR Sensor 2 (Good)** | `GPIO 4` | นับจำนวนชิ้นงานดีที่ผ่านเกณฑ์ QC |
-| **IR Sensor 3 (Waste)** | `GPIO 5` | นับจำนวนชิ้นงานเสียที่ถูกปัดออก |
+| อุปกรณ์ฮาร์ดแวร์ | ขาพิน ESP32 | ตำแหน่งบนสายพาน | หน้าที่การทำงาน |
+| --- | --- | --- | --- |
+| **IR Sensor 1 (Total)** | `GPIO 2` | ต้นสายพาน | นับจำนวนชิ้นงานทั้งหมดที่เข้าสู่สายพาน (อัตโนมัติ) |
+| **IR Sensor 2 (Waste)** | `GPIO 5` | กึ่งกลางสายพาน | นับจำนวนชิ้นงานเสียแบบ **Manual QC** — พนักงานตรวจด้วยสายตาแล้วจับชิ้นงานเสียให้โดนเซนเซอร์ |
+| **IR Sensor 3 (Good)** | `GPIO 4` | ปลายสายพาน | นับจำนวนชิ้นงานดีที่ไหลผ่านจนสุดสาย (อัตโนมัติ) |
 
 *(หมายเหตุ: สามารถปรับเปลี่ยนขา GPIO ของเซนเซอร์ได้ตามความเหมาะสมของโค้ดฝั่ง Arduino)*
 
@@ -99,9 +99,9 @@ $$OEE = Availability \times Performance \times Quality$$
 
 ### MQTT Topic Structure
 
-* `factory/conveyor/total` : Total item count at the entry point (Total Count)
-* `factory/conveyor/good` : Passed quality check item count (Good Count)
-* `factory/conveyor/waste` : Defective or rejected item count (Waste Count)
+* `factory/conveyor/total` : Total item count at the entry point (Total Count) — counted automatically
+* `factory/conveyor/good` : Good item count at the end of the conveyor (Good Count) — counted automatically
+* `factory/conveyor/waste` : Defective/rejected item count (Waste Count) — counted via **Manual QC**: an operator visually inspects items and guides defective ones onto the middle sensor
 
 ---
 
@@ -109,11 +109,11 @@ $$OEE = Availability \times Performance \times Quality$$
 
 Based on the current firmware in `esp32/esp32_8.3v.ino`
 
-| Hardware Component | ESP32 Pin | Function / Description |
-| --- | --- | --- |
-| **IR Sensor 1 (Total)** | `GPIO 2` | Counts total incoming items on the conveyor |
-| **IR Sensor 2 (Good)** | `GPIO 4` | Counts items meeting quality criteria (Good) |
-| **IR Sensor 3 (Waste)** | `GPIO 5` | Counts defective/rejected items (Waste) |
+| Hardware Component | ESP32 Pin | Position on Conveyor | Function / Description |
+| --- | --- | --- | --- |
+| **IR Sensor 1 (Total)** | `GPIO 2` | Start of belt | Counts total incoming items (automatic) |
+| **IR Sensor 2 (Waste)** | `GPIO 5` | Middle of belt | Counts defective items via **Manual QC** — an operator visually inspects items and guides defective ones onto this sensor |
+| **IR Sensor 3 (Good)** | `GPIO 4` | End of belt | Counts good items that reach the end of the belt (automatic) |
 
 *(Note: Pin assignments can be customized in the Arduino code to fit your specific hardware configuration.)*
 
