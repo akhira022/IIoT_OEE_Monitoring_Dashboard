@@ -3,7 +3,8 @@
 ระบบตรวจสอบประสิทธิภาพสายพานลำเลียงอัจฉริยะแบบ Real-time ด้วยสถาปัตยกรรม Industrial IoT (IIoT) รองรับการคำนวณดัชนีประสิทธิผลโดยรวมของเครื่องจักร (OEE) บนระบบหลังบ้าน และแสดงผลแบบอัตโนมัติผ่าน Dashboard มาตรฐานอุตสาหกรรม
 
 > เอกสารครบสำหรับโปรเจค ปวส. (แยกบทที่ 1–5 + ภาคผนวก): [`docs/README.md`](docs/README.md)  
-> เอกสารรวมเล่มฉบับเดียว: [`docs/เอกสารโปรเจค-ปวส.md`](docs/เอกสารโปรเจค-ปวส.md)
+> เอกสารรวมเล่มฉบับเดียว: [`docs/เอกสารโปรเจค-ปวส.md`](docs/เอกสารโปรเจค-ปวส.md)  
+> รันระบบหลังบ้านทั้งหมดบนเครื่องด้วย Docker (ไม่ต้องใช้ฮาร์ดแวร์): [`deploy/README.md`](deploy/README.md)
 
 ---
 
@@ -136,3 +137,21 @@ Based on the current firmware in `esp32/esp32_8.3v.ino`
 2. **Backend Setup (Node-RED):** Access Node-RED via your browser at port `1880`. Click the top-right menu, select **Import**, and upload `node-red/flows_final_8.3v.json`. Then configure the HiveMQ Cloud broker hostname and credentials to match the ESP32 settings.
 3. **Database Setup (InfluxDB):** Ensure InfluxDB v2 is running on port `8086` and create a bucket named `conveyor_oee`.
 4. **Visualization Setup (Grafana):** Open Grafana at port `3000` and import `grafana/Smart Conveyor Belt - IIoT OEE Dashboard-1785916197192.json` to start real-time monitoring.
+
+---
+
+## Run the Whole Backend Locally (Docker Compose)
+
+Don't have an ESP32 or a HiveMQ Cloud account? A ready-to-run development stack
+spins up Mosquitto (MQTT), Node-RED (OEE engine), InfluxDB v2, and Grafana —
+plus a sensor **simulator** that feeds the `factory/conveyor/*` topics — so you
+can see the full pipeline working end-to-end on your machine:
+
+```bash
+docker compose --env-file deploy/.env up -d --build
+# Grafana : http://localhost:3000   (anonymous access enabled)
+# Node-RED: http://localhost:1880
+```
+
+See [`deploy/README.md`](deploy/README.md) for full details. Cloud Agents pick
+this up automatically via [`.cursor/environment.json`](.cursor/environment.json).
