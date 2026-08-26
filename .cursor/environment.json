@@ -1,0 +1,11 @@
+{
+  "name": "IIoT OEE Monitoring Dashboard",
+  "install": "bash deploy/scripts/install.sh",
+  "start": "bash deploy/scripts/start.sh",
+  "ports": [
+    { "name": "Grafana", "port": 3000 },
+    { "name": "Node-RED", "port": 1880 },
+    { "name": "InfluxDB", "port": 8086 },
+    { "name": "MQTT (Mosquitto)", "port": 1883 }
+  ]
+}
