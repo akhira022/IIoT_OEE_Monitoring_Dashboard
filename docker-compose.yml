@@ -1,0 +1,122 @@
+# IIoT OEE Monitoring Dashboard — local development stack
+#
+# Brings up the full backend pipeline that normally runs behind the ESP32
+# firmware, so the project can be developed and demonstrated without physical
+# hardware or the HiveMQ Cloud broker:
+#
+#   simulator ──MQTT──▶ mosquitto ──▶ node-red (OEE engine) ──▶ influxdb ──▶ grafana
+#
+# The ESP32 sketches in ./esp32 publish to the same MQTT topics, so pointing a
+# real board at this broker (or keeping the HiveMQ Cloud broker) works too.
+#
+# Credentials in ./deploy/.env are LOCAL DEVELOPMENT ONLY — never reuse them.
+
+name: iiot-oee
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: oee-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # MQTT over WebSockets
+    volumes:
+      - ./deploy/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+    networks:
+      - oee-net
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: oee-influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - oee-net
+
+  node-red:
+    build: ./deploy/node-red
+    container_name: oee-node-red
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    environment:
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET}
+      TZ: Asia/Bangkok
+    volumes:
+      - ./deploy/node-red/data:/data
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    networks:
+      - oee-net
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: oee-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USERNAME}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_USERS_DEFAULT_THEME: light
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET}
+    volumes:
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    networks:
+      - oee-net
+
+  simulator:
+    build: ./deploy/simulator
+    container_name: oee-simulator
+    restart: unless-stopped
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      PUBLISH_INTERVAL_SEC: "2"
+    depends_on:
+      mosquitto:
+        condition: service_started
+    networks:
+      - oee-net
+
+networks:
+  oee-net:
+    driver: bridge
+
+volumes:
+  mosquitto-data:
+  influxdb-data:
+  influxdb-config:
+  grafana-data:

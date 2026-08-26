@@ -1,0 +1,7 @@
+# Keep only the curated Node-RED project files in git; ignore everything the
+# Node-RED runtime generates inside the mounted /data directory.
+*
+!.gitignore
+!settings.js
+!flows.json
+!flows_cred.json

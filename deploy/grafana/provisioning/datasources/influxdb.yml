@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB-Conveyor
+    type: influxdb
+    # UID must match the datasource referenced by the dashboard JSON
+    # (grafana/Smart Conveyor Belt - IIoT OEE Dashboard-*.json).
+    uid: bfsukgb2cqo00d
+    access: proxy
+    url: http://influxdb:8086
+    isDefault: true
+    jsonData:
+      version: Flux
+      organization: ${INFLUXDB_ORG}
+      defaultBucket: ${INFLUXDB_BUCKET}
+      tlsSkipVerify: true
+    secureJsonData:
+      token: ${INFLUXDB_TOKEN}
