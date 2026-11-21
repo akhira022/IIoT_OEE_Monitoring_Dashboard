@@ -69,7 +69,7 @@ $$OEE = Availability \times Performance \times Quality$$
 
 ---
 
-# IIoT OEE Monitoring Dashboard v 8.3 (English)
+# IIoT OEE Monitoring Dashboard v 1.0 (English)
 
 A real-time smart conveyor belt efficiency monitoring system powered by Industrial IoT (IIoT) architecture. Features backend calculation of Overall Equipment Effectiveness (OEE) metrics and automated visualization via an industry-standard dashboard.
 
